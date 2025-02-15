@@ -1,4 +1,4 @@
 J# hacked-2025-team-raid
 
 Members:
-Aidan, Rowan, Jeevan, Ryan, Phillip
+Aidan, Rowan, Jeevan.s, Ryan, Phillip

@@ -1,5 +1,4 @@
 # hacked-2025-team-raid
 
 Members:
-Aidan,
-Phillip,
+Aidan, Rowan, Phillip

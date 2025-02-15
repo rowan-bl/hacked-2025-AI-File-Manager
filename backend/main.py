@@ -3,6 +3,7 @@ import sys
 from dotenv import load_dotenv
 import requests
 import json
+import fileIndex
 
 load_dotenv()
 

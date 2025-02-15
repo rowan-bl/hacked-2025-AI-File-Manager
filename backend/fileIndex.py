@@ -14,4 +14,3 @@ def index_from_directory(root_path):
         index["files"] = files
     return index
 
-print(json.dumps(index_from_directory(r"C:\Users\rbzom\OneDrive\Documents\My Games"), indent=2))

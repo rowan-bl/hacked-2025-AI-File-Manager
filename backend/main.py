@@ -10,6 +10,7 @@ load_dotenv()
 OLLAMA_URL = os.getenv("OLLAMA_URL")
 
 print(OLLAMA_URL)
+print(json.dumps(fileIndex.index_from_directory(r"C:\Users\rbzom\OneDrive\Documents\My Games"), indent=2))
 
 headers = {
     "content-type": "application/json"

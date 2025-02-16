@@ -69,6 +69,7 @@ data = {
     """,
     "options": {  
             "temperature": 0, # remove creativity so it gives a consistient output
+            "seed": 42 # set seed to remove variance (aim is to help limit the amount of halucinations)
         },
     "stream": False
 }

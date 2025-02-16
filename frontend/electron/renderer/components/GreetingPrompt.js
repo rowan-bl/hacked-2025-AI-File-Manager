@@ -5,11 +5,13 @@ import FormLabel from "@mui/joy/FormLabel";
 import Textarea from "@mui/joy/Textarea";
 import IconButton from "@mui/joy/IconButton";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import { useState } from "react"; // Add this import
 
-export default function GreetingPrompt({ text }) {
+export default function GreetingPrompt() {
+  const [formInput, setformInput] = useState("");
   return (
     <FormControl>
-      <FormLabel>{text}</FormLabel>
+      <FormLabel>Hello World</FormLabel>
       <Textarea
         placeholder="Type something here…"
         minRows={3}
@@ -26,8 +28,7 @@ export default function GreetingPrompt({ text }) {
             <IconButton
               variant="plain"
               color="neutral"
-              onClick={(event) => setAnchorEl(event.currentTarget)}>
-              <FormatBold />
+              onClick={(event) => setformInput(event.currentTarget)}>
               <KeyboardArrowDown fontSize="md" />
             </IconButton>
             <Button sx={{ ml: "auto" }}>Send</Button>
@@ -36,9 +37,8 @@ export default function GreetingPrompt({ text }) {
         sx={[
           {
             minWidth: 300,
-            fontWeight,
+            fontWeight: 400,
           },
-          italic ? { fontStyle: "italic" } : { fontStyle: "initial" },
         ]}
       />
     </FormControl>

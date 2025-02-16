@@ -8,6 +8,7 @@ import fileIndex
 load_dotenv()
 
 OLLAMA_URL = os.getenv("OLLAMA_URL")
+MODEL = os.getenv("MODEL")
 
 file_system_index = json.dumps(fileIndex.index_from_directory(r"C:\Users\rbzom\OneDrive\Documents\TestData"), indent=2)
 prompt = "i want to sort my files by program name, can you do this"
@@ -18,7 +19,7 @@ headers = {
 }
 
 data = {
-    "model": "deepseek-r1:8b",
+    "model": f"{MODEL}",
     "prompt": f"""
       You are an intelligent file system assistant. You have been provided with the current file system index in JSON format, which lists available files along with their names and extensions. Use this index as context when determining the actions required to fulfill the user's instruction.
 

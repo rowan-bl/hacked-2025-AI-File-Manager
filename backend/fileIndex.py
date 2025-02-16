@@ -7,12 +7,24 @@ def index_from_directory(root_path):
     with os.scandir(root_path) as entries: # iterate through directory enteries
         for entry in entries:
             if entry.is_dir(): # if folder
-                index[entry.name] = index_from_directory(os.path.join(root_path, entry.name)) #recursively call
+                index[entry.name] = index_from_directory(os.path.join(root_path, entry.name)) # recursively call
             else: # if file
-                files.append(entry.name)
+                filename = entry.name
+                parts = filename.split(".", 1)
+                if len(parts) == 1: 
+                    name_part = filename
+                    ext_part = ""
+                else:
+                    name_part, ext_part = parts
+                    if not name_part:
+                        name_part = filename
+                        ext_part = ""
+                files.append({
+                    "name": name_part,
+                    "extension": ext_part
+                })
     index["files"] = files
     return index
-
 
 def count_files(data):
     total_files = 0
@@ -26,3 +38,7 @@ def count_files(data):
 
     _count_recursive(data)
     return total_files
+
+
+
+# print(json.dumps({"root":index_from_directory(r"C:\Users\rbzom\OneDrive\Desktop\TEST DATA")}, indent=2))

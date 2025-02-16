@@ -16,7 +16,7 @@ MODEL = os.getenv("MODEL")
 file_system_index_raw = {"root":fileIndex.index_from_directory(r"C:\Users\rbzom\OneDrive\Documents\TestData")}
 file_system_index = json.dumps(file_system_index_raw, indent=2)
 count = fileIndex.count_files(file_system_index_raw)
-prompt = "i want to sort my files by program name, can you do this"
+prompt = "organize each program number into seperate folders"
 
 headers = {
     "content-type": "application/json"
@@ -25,7 +25,16 @@ headers = {
 data = {
     "model": f"{MODEL}",
     "prompt": f""" You are an intelligent file system formatting assistant.
-        You have been provided with the current file system index in JSON format, which lists available files along with their names and extensions.
+        You have been provided with the current file system index in JSON format, here is the layout of the file system you will recieve:
+        {{
+            "root": {{
+                "(folder name)": {{ 
+                "files": [
+                   {{"name": "(file name)", "extension": "(file extension with .)"}}
+                ]
+                }}
+            }}
+        }}
          
         Use this index as context when determining the actions required to fulfill the user's instruction.
 
@@ -39,12 +48,12 @@ data = {
         "{prompt}"
         </UserPrompt>
 
+        I want you to break down the user prompt into a "action" which then can be used to sort the current File system index, and return back a JSON file that has the contents organized.
 
-        I want you to sort the current File system index, and return back a JSON file that has the contents organized.
+        You are allowed to make new folders, and remove COMPLETELY empty folders
 
-        You are allowed to make new folders, and remove empty folders that contents are moved from
-
-        Ensure all original files are contained in the updated JSON output.
+        Ensure all original files are contained in the updated JSON output, I KNOW THIS IS 100% CORRECT AND IF THIS ISNT MET 50% OF MY EMPLOYEES WILL BE FIRED !!
+        
         ENSURE THE TOTAL FINAL COUNT OF THE NUMBER OF FILES IS {count}, I KNOW THIS IS 100% CORRECT AND IF THIS ISNT MET 50% OF MY EMPLOYEES WILL BE FIRED !!
 
         In your response, I want you provide the updated JSON output, which should be contained in a <answer> xml tag.
@@ -56,7 +65,7 @@ data = {
             "root": {{
                 "(folder name)": {{
                 "files": [
-                   (files listed here)
+                   {{"name": "(file name)", "extension": "(file extension with .)"}}
                 ]
                 }}
             }}
@@ -69,7 +78,8 @@ data = {
     """,
     "options": {  
             "temperature": 0, # remove creativity so it gives a consistient output
-            "seed": 42 # set seed to remove variance (aim is to help limit the amount of halucinations)
+            "seed": 42, # set seed to remove variance (aim is to help limit the amount of halucinations)
+            "num_ctx": 4048
         },
     "stream": False
 }

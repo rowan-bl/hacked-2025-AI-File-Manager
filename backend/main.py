@@ -78,7 +78,7 @@ print(data)
 
 response = requests.post(OLLAMA_URL, headers=headers, data=json.dumps(data))
 
-# error testing for the response (will need to refactor to tell us if we are able to connect to our response yet)
+# error testing for the response (will need to refactor for frontend later)
 if response.status_code == 200:
     print('response code = 200')
     response_text = response.text

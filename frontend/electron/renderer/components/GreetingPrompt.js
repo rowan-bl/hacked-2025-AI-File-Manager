@@ -1,17 +1,46 @@
-import Box from "@mui/material/Box";
-// import Button from "@material-ui/Button";
-// import Typography from "@material-ui/Typography";
-//import TextareaAutosize from "@mui/material/TextareaAutosize";
-//import exp from "constants";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Textarea from "@mui/joy/Textarea";
+import IconButton from "@mui/joy/IconButton";
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
 export default function GreetingPrompt({ text }) {
   return (
-    <Box
-      sx={{
-        borderRadius: 1,
-        bgcolor: "#413F5D",
-      }}>
-      <h1>{text}</h1>
-    </Box>
+    <FormControl>
+      <FormLabel>{text}</FormLabel>
+      <Textarea
+        placeholder="Type something here…"
+        minRows={3}
+        endDecorator={
+          <Box
+            sx={{
+              display: "flex",
+              gap: "var(--Textarea-paddingBlock)",
+              pt: "var(--Textarea-paddingBlock)",
+              borderTop: "1px solid",
+              borderColor: "divider",
+              flex: "auto",
+            }}>
+            <IconButton
+              variant="plain"
+              color="neutral"
+              onClick={(event) => setAnchorEl(event.currentTarget)}>
+              <FormatBold />
+              <KeyboardArrowDown fontSize="md" />
+            </IconButton>
+            <Button sx={{ ml: "auto" }}>Send</Button>
+          </Box>
+        }
+        sx={[
+          {
+            minWidth: 300,
+            fontWeight,
+          },
+          italic ? { fontStyle: "italic" } : { fontStyle: "initial" },
+        ]}
+      />
+    </FormControl>
   );
 }

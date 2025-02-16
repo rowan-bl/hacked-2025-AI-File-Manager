@@ -1,5 +1,7 @@
 import os
 import json
+import pathlib
+import shutil
 
 def index_from_directory(root_path):
     index = {}
@@ -42,3 +44,36 @@ def count_files(data):
 
 
 # print(json.dumps({"root":index_from_directory(r"C:\Users\rbzom\OneDrive\Desktop\TEST DATA")}, indent=2))
+#Will move or delete a file depending on the type given, will have to modify to make more sense with the information coming in from deepseek
+def move_files(data, currentpath ,root = "C:\\test_folder"):
+    
+
+    for folder, files in data.items():
+        current_path = os.path.join(current_path, folder)
+        pathlib.Path(current_path).mkdir(parents=True, exist_ok=True) #if the filepath doesnt exist, create it, otherwise does nothing
+
+        if isinstance(files, dict):
+            move_files(files, current_path, root)
+        elif isinstance(files, list):
+            for file in files:
+                source_file = os.path.join(root, file)
+                destination = os.path.join(current_path, file)
+
+                if os.path.exists(source_file):
+                    shutil.move(source_file, destination)
+                    print(f"moved: {source_file} -> {destination}")
+                else:
+                    print("crap it didnt move")
+
+                
+                
+    
+
+    # if type == "empty_dir":
+    #     try:
+    #         os.rmdir(root_file_path)
+    #     except Exception:
+    #         print("No directory to delete or directory still has files within it")
+
+test_data = {'Documents': {'Text Files': ['test txt.txt', 'random_test_text_document.txt'], 'Word Documents': ['test word doc.docx']}}
+move_files(test_data)

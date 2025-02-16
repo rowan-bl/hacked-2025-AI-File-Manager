@@ -1,30 +1,26 @@
 import { useState } from 'react';
-
-declare global {
-  interface Window {
-    electron: {
-      openDirectory: () => Promise<string | null>;
-    };
-  }
-}
-
-import { Button, Container, Typography, TextField, Box, Paper, CircularProgress } from '@mui/material';
+import { Button, Container, Typography, TextField, Box, CircularProgress } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 
 const Home = () => {
-  const [selectedDirectory, setSelectedDirectory] = useState<string | null>(null);
-  const [prompt, setPrompt] = useState<string>('');
-  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [selectedDirectory, setSelectedDirectory] = useState(null);
+  const [prompt, setPrompt] = useState('');
+  const [aiResponse, setAiResponse] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState([]); // Store { prompt, response } pairs
 
   const handleChooseDirectory = async () => {
-    const directory = await window.electron.openDirectory();
-    if (directory) {
-      setSelectedDirectory(directory);
+    if (window.electron && window.electron.openDirectory) {
+      const directory = await window.electron.openDirectory();
+      if (directory) {
+        setSelectedDirectory(directory);
+      }
     }
   };
 
-  const handleSubmitPrompt = async () => {
+
+
+  const handleSubmitPrompt = () => {
     if (!prompt.trim()) return; // Ignore empty prompts
     setLoading(true);
     setAiResponse(null);
@@ -36,8 +32,16 @@ const Home = () => {
         "AI has analyzed your input and here's the result.",
         "Your request has been processed, and this is the output.",
       ];
-      setAiResponse(fakeResponses[Math.floor(Math.random() * fakeResponses.length)]);
+
+      const response = fakeResponses[Math.floor(Math.random() * fakeResponses.length)];
+      setAiResponse(response);
+
+
+      // Append the new prompt-response pair
+      setHistory((prevHistory) => [...prevHistory, { prompt, response }]);
+
       setLoading(false);
+      console.log("History:", history);
     }, 1500);
   };
 
@@ -64,7 +68,7 @@ const Home = () => {
             gap: 1,
           }}
         >
-          <FolderIcon color="primary" />
+          <FolderIcon color="primary" onClick={handleChooseDirectory} />
           <Typography variant="h6" sx={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {selectedDirectory}
           </Typography>
@@ -83,7 +87,7 @@ const Home = () => {
         <Box
           sx={{
             position: 'absolute',
-            bottom: '80px',
+            bottom: '120px',
             right: '20px',
             backgroundColor: '#f5f5f5',
             padding: '10px',
@@ -91,15 +95,29 @@ const Home = () => {
             minWidth: '250px',
             textAlign: 'left',
             boxShadow: 3,
-            margin: '1.5rem'
+            margin: '1.5rem',
+            maxHeight: '200px',
+            overflowY: 'auto',
           }}
         >
           {loading ? (
             <CircularProgress size={20} />
           ) : (
-            <Typography variant="body1" sx={{ fontSize: '1rem', color: '#333' }}>
-              {aiResponse || "Waiting for input..."}
-            </Typography>
+            <>
+              <Typography variant="body1" sx={{ fontSize: '1rem', color: '#333' }}>
+                {aiResponse || "Waiting for input..."}
+              </Typography>
+              <hr />
+              {/* Display previous responses */}
+              {history.map((entry, index) => (
+                <Box key={index} sx={{ marginTop: 1 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
+                    {entry.prompt}:
+                  </Typography>
+                  <Typography variant="caption">{entry.response}</Typography>
+                </Box>
+              ))}
+            </>
           )}
         </Box>
       )}

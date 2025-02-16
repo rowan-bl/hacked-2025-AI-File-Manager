@@ -10,7 +10,5 @@ def index_from_directory(root_path):
                 index[entry.name] = index_from_directory(os.path.join(root_path, entry.name))
             else:
                 files.append(entry.name)
-    if files:
-        index["files"] = files
+    index["files"] = files
     return index
-

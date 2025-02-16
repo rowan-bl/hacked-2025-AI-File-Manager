@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import requests
 import json
 import fileIndex
+import re
 
 # get .env data
 load_dotenv()
@@ -90,10 +91,27 @@ response = requests.post(OLLAMA_URL, headers=headers, data=json.dumps(data))
 
 # error testing for the response (will need to refactor for frontend later)
 if response.status_code == 200:
-    print('response code = 200')
-    response_text = response.text
-    data = json.loads(response_text)
-    actual_response = data["response"]
-    print(actual_response)
+    response = response.json()
+    raw_output = response.get("response", "")
+
+    answer_start = raw_output.find("<answer>")
+    answer_end = raw_output.find("</answer>")
+    description_start = raw_output.find("<description>")
+    description_end = raw_output.find("</description>")
+
+    json_output = raw_output[answer_start + len("<answer>") : answer_end].strip()
+    description_output = raw_output[description_start + len("<description>") : description_end].strip()
+    try:
+        organnized_data = json.loads(json_output)
+        print(json_output, type(json_output)) #string type
+        print(organnized_data, type(organnized_data)) #dict type
+    except json.JSONDecodeError as e:
+        print("error decoding json", e)
+
+    print(description_output, type(description_output)) #string
 else:
     print("error", response.status_code)
+
+
+# Send description to the front end # description_output
+fileIndex.move_files(organnized_data)

@@ -26,8 +26,3 @@ def count_files(data):
 
     _count_recursive(data)
     return total_files
-
-
-file_system_index = {"root":index_from_directory(r"C:\Users\rbzom\OneDrive\Documents\TestData")}
-count = count_files(file_system_index)
-print( f"{file_system_index} \n {count}")

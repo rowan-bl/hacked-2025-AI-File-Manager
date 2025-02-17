@@ -36,10 +36,19 @@ const Home = () => {
           throw new Error("Invalid response format");
         }
 
-        setHistory((prevHistory) => [
-          ...prevHistory,
-          { prompt, response: data.description, changed_dir: data.answer },
-        ]);
+        setHistory((prevHistory) => {
+          const lastEntry = prevHistory[prevHistory.length - 1];
+          return [
+            ...prevHistory.slice(0, -1),
+            {
+              ...lastEntry,
+              response: data.description,
+              changed_dir: data.answer,
+              loading: false
+            }
+          ];
+        });
+
         setError(null);
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -78,6 +87,12 @@ const Home = () => {
       return;
     }
 
+    setHistory((prevHistory) => [
+      ...prevHistory,
+      { prompt, response: null, changed_dir: null, loading: true },
+    ]);
+
+
     setLoading(true);
     setError(null);
 
@@ -87,13 +102,15 @@ const Home = () => {
     });
     ws.send(message);
 
+    setPrompt("");
+
     // Fallback timeout if no response arrives
     setTimeout(() => {
       if (loading) {
         setLoading(false);
         setError("Server did not respond in time.");
       }
-    }, 5000); // Timeout after 5 seconds
+    }, 20000); 
   };
 
   return (
@@ -116,8 +133,9 @@ const Home = () => {
             display: "flex",
             alignItems: "center",
             gap: 1,
-          }}>
-          <FolderIcon color="primary" onClick={handleChooseDirectory} />
+          }}
+          onClick={handleChooseDirectory} >
+          <FolderIcon color="primary"/>
           <Typography
             variant="h6"
             sx={{
@@ -146,7 +164,18 @@ const Home = () => {
           {history.map((entry, index) => (
             <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
               <UserBubble content={entry.prompt} />
-              <AIBubble content={entry.response} />
+              {entry.loading ? (
+                <Box sx={{ 
+                  display: "flex", 
+                  justifyContent: "center",
+                  alignItems: "center", 
+                  p: 2 
+                }}>
+                  <CircularProgress size={24} />
+                </Box>
+              ) : (
+                entry.response && <AIBubble content={entry.response} />
+              )}
             </Box>
           ))}
         </Box>

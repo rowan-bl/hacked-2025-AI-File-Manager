@@ -169,20 +169,11 @@ const Home = () => {
             display: "flex",
             gap: 1,
           }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Enter your prompt..."
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            sx={{ backgroundColor: "white", borderRadius: "4px" }}
+          <GreetingPrompt
+            prompt={prompt}
+            setPrompt={setPrompt}
+            handleSubmit={handleSubmitPrompt}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmitPrompt}>
-            Submit
-          </Button>
         </Box>
       )}
     </Container>

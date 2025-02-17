@@ -1,4 +1,4 @@
-# File_sorter_404
+# AI-File-Manager
 
 ## Overview
 This **File Sorting Application** is a flexible, user friendly tool designed to organize your files in a directory tree of your choice based on custom text instructions from the user. The tool prompts you to select a file directory and provide sorting instructions, it then sends your folder tree structure to an LLM (Large Language Model) of your choice and pulls the files matching your sorting instructions and organizes them into new folders in the directory you initially provided after the LLM has determined the files that match your request.
@@ -29,9 +29,32 @@ You can change the model & url to whichever model you installed using Ollama
 
 ## Usage
 
+To get started, you'll need to open **two separate terminal windows**:
+
+1. **Backend**  
+   - Navigate to the `backend` folder (if necessary).  
+   - Run the command:
+     ```bash
+     py main.py
+     ```
+   - This will start your backend server.
+
+2. **Frontend (Electron)**  
+   - Navigate to the `frontend/electron` folder.  
+   - Run the command:
+     ```bash
+     npm run dev
+     ```
+   - This will start your frontend in development mode.
+
+> **Note**: We haven't had time to build the project yet, so you'll need to run it in development mode for now.
+
 ---
 
 ## Examples
+![Screenshot 2025-02-17 095925](https://github.com/user-attachments/assets/44fe96ae-0d0d-4094-b6f2-1beaa29ab35c)
+![Screenshot 2025-02-17 100022](https://github.com/user-attachments/assets/b865c38c-3fab-49ce-ae36-ce38c60f304b)
+![image](https://github.com/user-attachments/assets/7b1ee0b9-1100-42e0-9160-8a4d59d1e8b5)
 
 ---
 

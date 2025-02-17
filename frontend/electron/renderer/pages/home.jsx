@@ -11,7 +11,7 @@ const Home = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8080"); // Replace with your WebSocket server URL
+    const socket = new WebSocket("ws://localhost:8001"); // Replace with your WebSocket server URL
 
     socket.onopen = () => {
       console.log("WebSocket Connected");
@@ -22,13 +22,13 @@ const Home = () => {
       try {
         const data = JSON.parse(event.data);
 
-        if (!data.description || !data.changed_dir) {
+        if (!data.answer || !data.description) {
           throw new Error("Invalid response format");
         }
 
         setHistory((prevHistory) => [
           ...prevHistory,
-          { prompt, response: data.description, changed_dir: data.changed_dir },
+          { prompt, response: data.description, changed_dir: data.answer },
         ]);
         setError(null);
       } catch (error) {
@@ -71,7 +71,7 @@ const Home = () => {
     setLoading(true);
     setError(null);
 
-    const message = JSON.stringify({ prompt, root_dir: selectedDirectory });
+    const message = JSON.stringify({ prompt: prompt, root_dir: selectedDirectory });
     ws.send(message);
 
     // Fallback timeout if no response arrives

@@ -25,11 +25,11 @@ async def handle_websocket(websocket):
 
             print("Received message:", message)
             try:
-                data = json.loads(message)
+                inc_data = json.loads(message)
 
                 # data to use in prompt
-                prompt = data.get("prompt", "")
-                root_dir = data.get("root_dir", "")
+                prompt = inc_data.get("prompt", "")
+                root_dir = inc_data .get("root_dir", "")
                 if not root_dir or not os.path.isdir(root_dir):
                     error_resp = {"error": f"Path does not exist or is invalid: '{root_dir}'"}
                     await websocket.send(json.dumps(error_resp))
@@ -107,6 +107,8 @@ async def handle_websocket(websocket):
                 "stream": False
             }
 
+            print(data)
+
             try:
                 response = requests.post(OLLAMA_URL, headers=headers, data=json.dumps(data))
                 response.raise_for_status()
@@ -118,6 +120,8 @@ async def handle_websocket(websocket):
                 continue
             
             response = response.json()
+            print(response)
+            
             raw_output = response.get("response", "")
 
             answer_start = raw_output.find("<answer>")
@@ -135,15 +139,16 @@ async def handle_websocket(websocket):
             except json.JSONDecodeError as e:
                 print("error decoding json", e)
 
-            
             output_data = {
                 "answer": organized_data,
                 "description": description_output
             }
+
             await websocket.send(json.dumps(output_data))
             print("Sent response to frontend:", output_data)
 
-
+            fileIndex.move_files(organized_data, root_dir, root_dir)
+        
     except websockets.ConnectionClosed:
         # The client disconnected
         print("Client disconnected:", websocket.remote_address)
@@ -270,8 +275,8 @@ async def handle_websocket(websocket):
 
 async def main():
     # websockets.serve(func, host, port) => returns a server awaitable
-    async with websockets.serve(handle_websocket, "localhost", 8000):
-        print("WebSocket server listening on ws://localhost:8000")
+    async with websockets.serve(handle_websocket, "localhost", 8001):
+        print("WebSocket server listening on ws://localhost:8001")
         # Keep running until manually stopped
         await asyncio.Future()  # run forever
 

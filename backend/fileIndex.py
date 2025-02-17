@@ -46,7 +46,7 @@ def count_files(data):
 # print(json.dumps({"root":index_from_directory(r"C:\Users\rbzom\OneDrive\Desktop\TEST DATA")}, indent=2))
 #Will move or delete a file depending on the type given, will have to modify to make more sense with the information coming in from deepseek
 
-def move_files(data, current_path ,root = "C:\\test_folder"):
+def move_files(data, current_path, root):
     for folder, files in data.items():
         current_path = os.path.join(root, folder)
         current_path = os.path.join(root, folder)

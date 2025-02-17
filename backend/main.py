@@ -27,17 +27,7 @@ async def handle_websocket(websocket):
             print("Received message:", message)
             try:
                 inc_data = json.loads(message)
-                
-                # finding message type
-                msg_type = inc_data.get("type")
 
-                
-            except json.JSONDecodeError:
-                error_resp = {"error": "Invalid JSON format."}
-                await websocket.send(json.dumps(error_resp))
-                continue
-
-            if msg_type == "prompt":
                 # data to use in prompt
                 prompt = inc_data.get("prompt", "")
                 root_dir = inc_data .get("root_dir", "")
@@ -45,126 +35,84 @@ async def handle_websocket(websocket):
                     error_resp = {"error": f"Path does not exist or is invalid: '{root_dir}'"}
                     await websocket.send(json.dumps(error_resp))
                     return
+                
+            except json.JSONDecodeError:
+                error_resp = {"error": "Invalid JSON format."}
+                await websocket.send(json.dumps(error_resp))
+                continue
 
-                # prepare message
-                file_system_index_raw = fileIndex.index_from_directory(root_dir)
-                file_system_index = json.dumps(file_system_index_raw)
-                count = fileIndex.count_files(file_system_index_raw)
+            # prepare message
+            file_system_index_raw = fileIndex.index_from_directory(root_dir)
+            file_system_index = json.dumps(file_system_index_raw)
+            count = fileIndex.count_files(file_system_index_raw)
 
-                headers = {
-                    "content-type": "application/json"
-                }
+            headers = {
+                "content-type": "application/json"
+            }
 
-                data = {
-                    "model": f"{MODEL}",
-                    "prompt": f""" You are an intelligent file system formatting assistant.
-                        You have been provided with the current file system index in JSON format, here is the layout of the file system you will recieve:
-                        {{
-                                "(folder name)": {{ 
-                                "files": [
-                                {{"name": "(file name)", "extension": "(file extension with .)"}}
-                                ]
-                                }}
-                        }}
-                        
-                        Use this index as context when determining the actions required to fulfill the user's instruction.
-
-                        File system index:
-                        <FileSystemIndex>
-                        {file_system_index}
-                        </FileSystemIndex>
-
-                        User Instruction: 
-                        <UserPrompt>
-                        "{prompt}"
-                        </UserPrompt>
-
-                        I want you to break down the user prompt into a "action" which then can be used to sort the current File system index, and return back a JSON file that has the contents organized.
-
-                        You are allowed to make new folders.
-
-                        Ensure all original files are contained in the updated JSON output, I KNOW THIS IS 100% CORRECT AND IF THIS ISNT MET 50% OF MY EMPLOYEES WILL BE FIRED !!
-                        
-                        ENSURE THE TOTAL FINAL COUNT OF THE NUMBER OF FILES IS {count}, I KNOW THIS IS 100% CORRECT AND IF THIS ISNT MET 50% OF MY EMPLOYEES WILL BE FIRED !!
-
-                        In your response, I want you provide the updated JSON output, which should be contained in a <answer> xml tag.
-                        I would also like a very short summary of what we have done, this should be the changes we have made to the file tree, so we can send it back to the user in a <description> xml tag.
-
-                        ENSURE THE FINAL OUTPUT FOLLOWS THE FOLLOWING FORMAT OTHERWISE 50% OF MY EMPLOYEES WILL BE FIRED!!!!:
-                        <answer>
-                        {{
-                                "(folder name)": {{
-                                "files": [
-                                {{"name": "(file name)", "extension": "(file extension with .)"}}
-                                ]
-                                }}
-                        }}
-                        </answer>
-
-                        <description>
-                        (put description here)
-                        </description>
-                    """,
-                    "options": {  
-                            "temperature": 0, # remove creativity so it gives a consistient output
-                            "seed": 42, # set seed to remove variance (aim is to help limit the amount of halucinations)
-                            "num_ctx": 4048
-                        },
-                    "stream": False
-                }
-
-                print(data)
-
-                try:
-                    response = requests.post(OLLAMA_URL, headers=headers, data=json.dumps(data))
-                    response.raise_for_status()
+            data = {
+                "model": f"{MODEL}",
+                "prompt": f""" You are an intelligent file system formatting assistant.
+                    You have been provided with the current file system index in JSON format, here is the layout of the file system you will recieve:
+                    {{
+                            "(folder name)": {{ 
+                            "files": [
+                            {{"name": "(file name)", "extension": "(file extension with .)"}}
+                            ]
+                            }}
+                    }}
                     
-                except Exception as e:
-                    # If DeepSeek call fails, notify the frontend
-                    error_message = {"error": f"DeepSeek request failed: {str(e)}"}
-                    await websocket.send(json.dumps(error_message))
-                    continue
-                
-                response = response.json()
-                print(response)
-                
-                raw_output = response.get("response", "")
+                    Use this index as context when determining the actions required to fulfill the user's instruction.
 
-                answer_start = raw_output.find("<answer>")
-                answer_end = raw_output.find("</answer>")
-                description_start = raw_output.find("<description>")
-                description_end = raw_output.find("</description>")
+                    File system index:
+                    <FileSystemIndex>
+                    {file_system_index}
+                    </FileSystemIndex>
 
-                json_output = raw_output[answer_start + len("<answer>") : answer_end].strip()
-                description_output = raw_output[description_start + len("<description>") : description_end].strip()
+                    User Instruction: 
+                    <UserPrompt>
+                    "{prompt}"
+                    </UserPrompt>
 
-                try:
-                    organized_data = json.loads(json_output)
-                    print(json_output, type(json_output)) #string type
-                    print(organized_data, type(organized_data)) #dict type
-                except json.JSONDecodeError as e:
-                    print("error decoding json", e)
+                    I want you to break down the user prompt into a "action" which then can be used to sort the current File system index, and return back a JSON file that has the contents organized.
 
-                output_data = {
-                    "answer": organized_data,
-                    "description": description_output
-                }
+                    You are allowed to make new folders.
 
-                await websocket.send(json.dumps(output_data))
-                print("Sent response to frontend:", output_data)
+                    Ensure all original files are contained in the updated JSON output, I KNOW THIS IS 100% CORRECT AND IF THIS ISNT MET 50% OF MY EMPLOYEES WILL BE FIRED !!
+                    
+                    ENSURE THE TOTAL FINAL COUNT OF THE NUMBER OF FILES IS {count}, I KNOW THIS IS 100% CORRECT AND IF THIS ISNT MET 50% OF MY EMPLOYEES WILL BE FIRED !!
 
-            elif msg_type == "confirmation":
-                user_confirmed = inc_data.get("confirm", False)
+                    In your response, I want you provide the updated JSON output, which should be contained in a <answer> xml tag.
+                    I would also like a very short summary of what we have done, this should be the changes we have made to the file tree, so we can send it back to the user in a <description> xml tag.
 
-                if user_confirmed:
-                    confirmation_response = {
-                        "confirmation_response": "Changes applied successfully!"
-                    }
-                    fileIndex.move_files(organized_data, root_dir, root_dir)
-                else:
-                    confirmation_response = {
-                        "confirmation_response": "Changes canceled, please re-prompt !"
-                    }
+                    ENSURE THE FINAL OUTPUT FOLLOWS THE FOLLOWING FORMAT OTHERWISE 50% OF MY EMPLOYEES WILL BE FIRED!!!!:
+                    <answer>
+                    {{
+                            "(folder name)": {{
+                            "files": [
+                            {{"name": "(file name)", "extension": "(file extension with .)"}}
+                            ]
+                            }}
+                    }}
+                    </answer>
+
+                    <description>
+                    (put description here)
+                    </description>
+                """,
+                "options": {  
+                        "temperature": 0, # remove creativity so it gives a consistient output
+                        "seed": 42, # set seed to remove variance (aim is to help limit the amount of halucinations)
+                        "num_ctx": 4048
+                    },
+                "stream": False
+            }
+
+            print(data)
+
+            try:
+                response = requests.post(OLLAMA_URL, headers=headers, data=json.dumps(data))
+                response.raise_for_status()
                 
                 await websocket.send(json.dumps(confirmation_response))
                 print("Sent confirmation response:", confirmation_response)

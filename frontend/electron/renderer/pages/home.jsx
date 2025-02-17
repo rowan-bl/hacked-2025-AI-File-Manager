@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Container, Typography, TextField, Box, CircularProgress } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
+import GreetingPrompt from '../components/GreetingPrompt';
 
 const Home = () => {
   const [selectedDirectory, setSelectedDirectory] = useState(null);
@@ -19,11 +20,11 @@ const Home = () => {
   };
 
   const handleSubmitPrompt = () => {
-    if (!prompt.trim()) return; // Ignore empty prompts
+    if (!prompt.trim()) return;
     setLoading(true);
     setAiResponse(null);
-  
-    // Fake AI response delay
+    
+    // Simulate AI response
     setTimeout(() => {
       const fakeResponses = [
         "This is a sample AI-generated response.",
@@ -92,29 +93,10 @@ const Home = () => {
             <Typography variant="body2" sx={{ flex: 1, textAlign: 'left', color: '#dddddd', display: 'block', marginLeft:'0'}}>
               {entry.response}
             </Typography>
-         
           </Box>
         ))}
-      
-        {/* Latest Message (Only Updates on New Input) */}
-        {/* Keep commented logic intact */}
-        {/* {loading ? (
-          <CircularProgress size={20} />
-        ) : aiResponse && (
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', backgroundColor: '#e0e0e0', borderRadius: '4px' }}>
-            <Typography variant="body2" sx={{ flex: 1, textAlign: 'left', color: '#666' }}>
-              {aiResponse}
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#333', flex: 1, textAlign: 'right' }}>
-              {prompt}
-            </Typography>
-          </Box>
-        )} */}
       </Box>
-      
       )}
-
-      {/* Prompt Input */}
       {selectedDirectory && (
         <Box
           sx={{
@@ -127,17 +109,7 @@ const Home = () => {
             gap: 1,
           }}
         >
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Enter your prompt..."
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            sx={{ backgroundColor: 'white', borderRadius: '4px' }}
-          />
-          <Button variant="contained" color="primary" onClick={handleSubmitPrompt}>
-            Submit
-          </Button>
+          <GreetingPrompt prompt={prompt} setPrompt={setPrompt} handleSubmit={handleSubmitPrompt} />
         </Box>
       )}
     </Container>

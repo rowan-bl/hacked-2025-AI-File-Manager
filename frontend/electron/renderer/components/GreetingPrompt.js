@@ -3,16 +3,23 @@ import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Textarea from "@mui/joy/Textarea";
-import IconButton from "@mui/joy/IconButton";
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import { useState } from "react"; // Add this import
+import { useState } from "react";
 
 export default function GreetingPrompt() {
-  const [formInput, setformInput] = useState("");
+  const [formInput, setFormInput] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("submitted:", formInput);
+  };
+
   return (
-    <FormControl>
+    <FormControl component="form" onSubmit={handleSubmit}>
       <FormLabel>Hello World</FormLabel>
       <Textarea
+        className="textarea"
+        value={formInput}
+        onChange={(e) => setFormInput(e.target.value)}
         placeholder="Type something here…"
         minRows={3}
         endDecorator={
@@ -25,19 +32,17 @@ export default function GreetingPrompt() {
               borderColor: "divider",
               flex: "auto",
             }}>
-            <IconButton
-              variant="plain"
-              color="neutral"
-              onClick={(event) => setformInput(event.currentTarget)}>
-              <KeyboardArrowDown fontSize="md" />
-            </IconButton>
-            <Button sx={{ ml: "auto" }}>Send</Button>
+            <Button type="submit" sx={{ ml: "auto" }}>
+              Send
+            </Button>
           </Box>
         }
         sx={[
           {
             minWidth: 300,
             fontWeight: 400,
+            backgroundColor: "#413F5D",
+            color: "#FFFFFF",
           },
         ]}
       />

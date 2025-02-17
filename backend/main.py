@@ -18,6 +18,7 @@ MODEL = os.getenv("MODEL")
 #setup websocket
 async def handle_websocket(websocket):
     print(f"Connected: {websocket.remote_address}")
+    organized_data = None
 
     try:
         while True:
@@ -28,7 +29,7 @@ async def handle_websocket(websocket):
                 inc_data = json.loads(message)
                 
                 # finding message type
-                msg_type = data.get("type")
+                msg_type = inc_data.get("type")
 
                 
             except json.JSONDecodeError:
@@ -151,9 +152,9 @@ async def handle_websocket(websocket):
 
                 await websocket.send(json.dumps(output_data))
                 print("Sent response to frontend:", output_data)
-                
+
             elif msg_type == "confirmation":
-                user_confirmed = data.get("confirm", False)
+                user_confirmed = inc_data.get("confirm", False)
 
                 if user_confirmed:
                     confirmation_response = {

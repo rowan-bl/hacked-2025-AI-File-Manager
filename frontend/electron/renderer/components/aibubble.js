@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { Container } from "@mui/material";
 
+
 export default function AiBubble({ content }) {
   return (
     <Container
@@ -18,6 +19,7 @@ export default function AiBubble({ content }) {
         }}>
         <p>{content}</p>
         <div className="w-[50vw] h-0.5 bg-gray-300 mt-4 truncate"></div>
+        
       </Box>
     </Container>
   );

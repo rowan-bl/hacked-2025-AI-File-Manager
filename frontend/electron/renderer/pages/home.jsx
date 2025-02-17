@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
-
+import GreetingPrompt from "../components/greetingprompt";
 import AIBubble from "../components/aibubble";
 import UserBubble from "../components/userbubble";
 

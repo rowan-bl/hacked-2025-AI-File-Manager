@@ -1,4 +1,4 @@
-# File_sorter_404
+# AI-File-Manager
 
 ## Overview
 This **File Sorting Application** is a flexible, user friendly tool designed to organize your files in a directory tree of your choice based on custom text instructions from the user. The tool prompts you to select a file directory and provide sorting instructions, it then sends your folder tree structure to an LLM (Large Language Model) of your choice and pulls the files matching your sorting instructions and organizes them into new folders in the directory you initially provided after the LLM has determined the files that match your request.

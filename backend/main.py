@@ -151,6 +151,7 @@ async def handle_websocket(websocket):
 
                 await websocket.send(json.dumps(output_data))
                 print("Sent response to frontend:", output_data)
+                
             elif msg_type == "confirmation":
                 user_confirmed = data.get("confirm", False)
 

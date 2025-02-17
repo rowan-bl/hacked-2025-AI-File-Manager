@@ -21,7 +21,7 @@ const Home = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:8001"); 
+    const socket = new WebSocket("ws://localhost:8001"); // Replace with your WebSocket server URL
 
     socket.onopen = () => {
       console.log("WebSocket Connected");
@@ -38,7 +38,7 @@ const Home = () => {
 
         setHistory((prevHistory) => [
           ...prevHistory,
-          { prompt: prompt, response: data.description, changed_dir: data.answer },
+          { prompt, response: data.description, changed_dir: data.answer },
         ]);
         setError(null);
       } catch (error) {
@@ -82,7 +82,6 @@ const Home = () => {
     setError(null);
 
     const message = JSON.stringify({
-      type: "prompt",
       prompt: prompt,
       root_dir: selectedDirectory,
     });
@@ -110,7 +109,6 @@ const Home = () => {
       {/* Folder Selection */}
       {selectedDirectory && (
         <Box
-          onClick={handleChooseDirectory}
           sx={{
             position: "absolute",
             top: 20,
@@ -119,7 +117,7 @@ const Home = () => {
             alignItems: "center",
             gap: 1,
           }}>
-          <FolderIcon color="primary"/>
+          <FolderIcon color="primary" onClick={handleChooseDirectory} />
           <Typography
             variant="h6"
             sx={{

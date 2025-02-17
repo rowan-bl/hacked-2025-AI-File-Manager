@@ -18,7 +18,6 @@ MODEL = os.getenv("MODEL")
 #setup websocket
 async def handle_websocket(websocket):
     print(f"Connected: {websocket.remote_address}")
-    organized_data = None
 
     try:
         while True:

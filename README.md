@@ -29,6 +29,26 @@ You can change the model & url to whichever model you installed using Ollama
 
 ## Usage
 
+To get started, you'll need to open **two separate terminal windows**:
+
+1. **Backend**  
+   - Navigate to the `backend` folder (if necessary).  
+   - Run the command:
+     ```bash
+     py main.py
+     ```
+   - This will start your backend server.
+
+2. **Frontend (Electron)**  
+   - Navigate to the `frontend/electron` folder.  
+   - Run the command:
+     ```bash
+     npm run dev
+     ```
+   - This will start your frontend in development mode.
+
+> **Note**: We haven't had time to build the project yet, so you'll need to run it in development mode for now.
+
 ---
 
 ## Examples

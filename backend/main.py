@@ -114,10 +114,17 @@ async def handle_websocket(websocket):
                 response = requests.post(OLLAMA_URL, headers=headers, data=json.dumps(data))
                 response.raise_for_status()
                 
-                print("Sent confirmation response:", confirmation_response)
-            else:
-                error_resp = {"error": "Unknown message type."}
-                await websocket.send(json.dumps(error_resp))
+            except Exception as e:
+                # If DeepSeek call fails, notify the frontend
+                error_message = {"error": f"DeepSeek request failed: {str(e)}"}
+                await websocket.send(json.dumps(error_message))
+                continue
+            
+            response = response.json()
+            print(response)
+            
+            raw_output = response.get("response", "")
+
             answer_start = raw_output.find("<answer>")
             answer_end = raw_output.find("</answer>")
             description_start = raw_output.find("<description>")

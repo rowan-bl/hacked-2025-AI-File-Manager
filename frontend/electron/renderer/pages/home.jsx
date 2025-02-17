@@ -7,7 +7,7 @@ const Home = () => {
   const [prompt, setPrompt] = useState('');
   const [aiResponse, setAiResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState([]); // Store { prompt, response } pairs
+  const [history, setHistory] = useState([]); // Static messages
 
   const handleChooseDirectory = async () => {
     if (window.electron && window.electron.openDirectory) {
@@ -18,13 +18,11 @@ const Home = () => {
     }
   };
 
-
-
   const handleSubmitPrompt = () => {
     if (!prompt.trim()) return; // Ignore empty prompts
     setLoading(true);
     setAiResponse(null);
-
+  
     // Fake AI response delay
     setTimeout(() => {
       const fakeResponses = [
@@ -32,18 +30,17 @@ const Home = () => {
         "AI has analyzed your input and here's the result.",
         "Your request has been processed, and this is the output.",
       ];
-
+  
       const response = fakeResponses[Math.floor(Math.random() * fakeResponses.length)];
-      setAiResponse(response);
-
-
-      // Append the new prompt-response pair
+      
+      // Only update history AFTER response is generated
       setHistory((prevHistory) => [...prevHistory, { prompt, response }]);
-
+  
+      setAiResponse(response);
       setLoading(false);
-      console.log("History:", history);
     }, 1500);
   };
+  
 
   return (
     <Container
@@ -56,7 +53,7 @@ const Home = () => {
         alignItems: 'center',
       }}
     >
-      {/* Folder icon and directory name */}
+      {/* Folder Selection */}
       {selectedDirectory && (
         <Box
           sx={{
@@ -75,54 +72,49 @@ const Home = () => {
         </Box>
       )}
 
-      {/* Choose Directory Button */}
       {!selectedDirectory && (
         <Button variant="contained" color="primary" onClick={handleChooseDirectory}>
           Choose Directory
         </Button>
       )}
 
-      {/* AI Response Box */}
+      {/* AI Response Section */}
       {selectedDirectory && (
         <Box
-          sx={{
-            position: 'absolute',
-            bottom: '120px',
-            right: '20px',
-            backgroundColor: '#f5f5f5',
-            padding: '10px',
-            borderRadius: '8px',
-            minWidth: '250px',
-            textAlign: 'left',
-            boxShadow: 3,
-            margin: '1.5rem',
-            maxHeight: '200px',
-            overflowY: 'auto',
-          }}
-        >
-          {loading ? (
-            <CircularProgress size={20} />
-          ) : (
-            <>
-              <Typography variant="body1" sx={{ fontSize: '1rem', color: '#333' }}>
-                {aiResponse || "Waiting for input..."}
-              </Typography>
-              <hr />
-              {/* Display previous responses */}
-              {history.map((entry, index) => (
-                <Box key={index} sx={{ marginTop: 1 }}>
-                  <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
-                    {entry.prompt}:
-                  </Typography>
-                  <Typography variant="caption">{entry.response}</Typography>
-                </Box>
-              ))}
-            </>
-          )}
-        </Box>
+          sx={{width:'100%', marginTop: '1rem'}}
+      >
+        {/* Static History */}
+        {history.map((entry, index) => (
+          <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0',display: 'block' }}>
+             <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#fff', flex: 1, textAlign: 'right', marginRight:'0' }}>
+              {entry.prompt}
+            </Typography>
+            <Typography variant="body2" sx={{ flex: 1, textAlign: 'left', color: '#dddddd', display: 'block', marginLeft:'0'}}>
+              {entry.response}
+            </Typography>
+         
+          </Box>
+        ))}
+      
+        {/* Latest Message (Only Updates on New Input) */}
+        {/* Keep commented logic intact */}
+        {/* {loading ? (
+          <CircularProgress size={20} />
+        ) : aiResponse && (
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', backgroundColor: '#e0e0e0', borderRadius: '4px' }}>
+            <Typography variant="body2" sx={{ flex: 1, textAlign: 'left', color: '#666' }}>
+              {aiResponse}
+            </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#333', flex: 1, textAlign: 'right' }}>
+              {prompt}
+            </Typography>
+          </Box>
+        )} */}
+      </Box>
+      
       )}
 
-      {/* Prompt Input Bar */}
+      {/* Prompt Input */}
       {selectedDirectory && (
         <Box
           sx={{

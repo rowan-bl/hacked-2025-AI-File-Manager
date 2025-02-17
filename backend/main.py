@@ -15,8 +15,6 @@ load_dotenv()
 OLLAMA_URL = os.getenv("OLLAMA_URL")
 MODEL = os.getenv("MODEL")
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 #setup websocket
 async def handle_websocket(websocket):
     print(f"Connected: {websocket.remote_address}")
@@ -56,13 +54,11 @@ async def handle_websocket(websocket):
                 "prompt": f""" You are an intelligent file system formatting assistant.
                     You have been provided with the current file system index in JSON format, here is the layout of the file system you will recieve:
                     {{
-                        "root": {{
                             "(folder name)": {{ 
                             "files": [
                             {{"name": "(file name)", "extension": "(file extension with .)"}}
                             ]
                             }}
-                        }}
                     }}
                     
                     Use this index as context when determining the actions required to fulfill the user's instruction.
@@ -91,13 +87,11 @@ async def handle_websocket(websocket):
                     ENSURE THE FINAL OUTPUT FOLLOWS THE FOLLOWING FORMAT OTHERWISE 50% OF MY EMPLOYEES WILL BE FIRED!!!!:
                     <answer>
                     {{
-                        "root": {{
                             "(folder name)": {{
                             "files": [
                             {{"name": "(file name)", "extension": "(file extension with .)"}}
                             ]
                             }}
-                        }}
                     }}
                     </answer>
 
@@ -162,27 +156,21 @@ async def handle_websocket(websocket):
 # file_system_index = json.dumps(file_system_index_raw, indent=2)
 # count = fileIndex.count_files(file_system_index_raw)
 # prompt = "organize each program number into seperate folders"
-=======
-root_folder =r"C:\Users\Phillip\Downloads"
+
+
+
+
 # test prompt
-=======
-root_folder =r"C:\Users\Phillip\Downloads"
-# test prompt
->>>>>>> Stashed changes
-file_system_index_raw = fileIndex.index_from_directory(root_folder)
-file_system_index = json.dumps(file_system_index_raw, indent=2)
-count = fileIndex.count_files(file_system_index_raw)
-prompt = "can you oraganize these into different files depending on their extension?"
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
+
+
+
+
 
 # headers = {
 #     "content-type": "application/json"
 # }
 
-<<<<<<< Updated upstream
 # data = {
 #     "model": f"{MODEL}",
 #     "prompt": f""" You are an intelligent file system formatting assistant.
@@ -196,19 +184,7 @@ prompt = "can you oraganize these into different files depending on their extens
 #                 }}
 #             }}
 #         }}
-=======
-data = {
-    "model": f"{MODEL}",
-    "prompt": f""" You are an intelligent file system formatting assistant.
-        You have been provided with the current file system index in JSON format, here is the layout of the file system you will recieve:
-        {{
-                "(folder name)": {{ 
-                "files": [
-                   {{"name": "(file name)", "extension": "(file extension with .)"}}
-                ]
-                }}
-        }}
->>>>>>> Stashed changes
+
          
 #         Use this index as context when determining the actions required to fulfill the user's instruction.
 
@@ -233,7 +209,7 @@ data = {
 #         In your response, I want you provide the updated JSON output, which should be contained in a <answer> xml tag.
 #         I would also like a very short summary of what we have done, this should be the changes we have made to the file tree, so we can send it back to the user in a <description> xml tag.
 
-<<<<<<< Updated upstream
+
 #         ENSURE THE FINAL OUTPUT FOLLOWS THE FOLLOWING FORMAT OTHERWISE 50% OF MY EMPLOYEES WILL BE FIRED!!!!:
 #         <answer>
 #         {{
@@ -246,18 +222,7 @@ data = {
 #             }}
 #         }}
 #         </answer>
-=======
-        ENSURE THE FINAL OUTPUT FOLLOWS THE FOLLOWING FORMAT OTHERWISE 50% OF MY EMPLOYEES WILL BE FIRED!!!!:
-        <answer>
-        {{
-                "(folder name)": {{
-                "files": [
-                   {{"name": "(file name)", "extension": "(file extension with .)"}}
-                ]
-                }}
-        
-        </answer>
->>>>>>> Stashed changes
+
 
 #         <description>
 #         (put description here)
@@ -299,13 +264,9 @@ data = {
 #     print("error", response.status_code)
 
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
 # # Send description to the front end # description_output
 
-
-
-# fileIndex.move_files(organized_data, root_path, root_path)
 
 async def main():
     # websockets.serve(func, host, port) => returns a server awaitable
@@ -316,11 +277,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-=======
 
-fileIndex.move_files(organnized_data,root_folder,root_folder)
->>>>>>> Stashed changes
-=======
 
-fileIndex.move_files(organnized_data,root_folder,root_folder)
->>>>>>> Stashed changes

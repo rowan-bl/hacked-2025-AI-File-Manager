@@ -122,6 +122,7 @@ const Home = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        position: "relative", 
       }}>
       {/* Folder Selection */}
       {selectedDirectory && (
@@ -160,26 +161,34 @@ const Home = () => {
 
       {/* Chat History */}
       {selectedDirectory && (
-        <Box sx={{ width: "100%", marginTop: "1rem" }}>
-          {history.map((entry, index) => (
-            <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
-              <UserBubble content={entry.prompt} />
-              {entry.loading ? (
-                <Box sx={{ 
-                  display: "flex", 
-                  justifyContent: "center",
-                  alignItems: "center", 
-                  p: 2 
-                }}>
-                  <CircularProgress size={24} />
-                </Box>
-              ) : (
-                entry.response && <AIBubble content={entry.response} />
-              )}
-            </Box>
-          ))}
-        </Box>
-      )}
+      <Box 
+        sx={{ 
+          width: "100%", 
+          marginTop: "4rem", 
+          marginBottom: "7rem", 
+          flexGrow: 1, 
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 12rem)", 
+        }}>
+        {history.map((entry, index) => (
+          <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
+            <UserBubble content={entry.prompt} />
+            {entry.loading ? (
+              <Box sx={{ 
+                display: "flex", 
+                justifyContent: "center",
+                alignItems: "center", 
+                p: 2 
+              }}>
+                <CircularProgress size={24} />
+              </Box>
+            ) : (
+              entry.response && <AIBubble content={entry.response} />
+            )}
+          </Box>
+        ))}
+      </Box>
+     )}
 
       {/* Error Message */}
       {error && (
@@ -187,23 +196,39 @@ const Home = () => {
           {error}
         </Typography>
       )}
+
+      {/* Bottom Overlay and Prompt */}
       {selectedDirectory && (
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 20,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "60%",
-            display: "flex",
-            gap: 1,
-          }}>
-          <GreetingPrompt
-            prompt={prompt}
-            setPrompt={setPrompt}
-            handleSubmit={handleSubmitPrompt}
+        <>
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: "220px",
+              background: "linear-gradient(transparent, #1a202c 30%)", 
+              pointerEvents: "none",
+            }}
           />
-        </Box>
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 20,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "60%",
+              display: "flex",
+              gap: 1,
+              zIndex: 1,
+            }}>
+            <GreetingPrompt
+              prompt={prompt}
+              setPrompt={setPrompt}
+              handleSubmit={handleSubmitPrompt}
+            />
+          </Box>
+        </>
       )}
     </Container>
   );

@@ -14,8 +14,15 @@ export default function GreetingPrompt() {
   };
 
   return (
-    <FormControl component="form" onSubmit={handleSubmit}>
-      <FormLabel>Hello World</FormLabel>
+    <FormControl
+      component="form"
+      onSubmit={onSubmit}
+      sx={{
+        width: "100%",
+        maxWidth: 800,
+        margin: "0 auto",
+      }}>
+      <FormLabel>Enter Prompt</FormLabel>
       <Textarea
         className="textarea"
         value={formInput}

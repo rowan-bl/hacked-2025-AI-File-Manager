@@ -19,7 +19,9 @@ export default function GreetingPrompt({ prompt, setPrompt, handleSubmit }) {
         maxWidth: 800,
         margin: "0 auto",
       }}>
-      <FormLabel>Enter Prompt</FormLabel>
+      <FormLabel sx={{
+        color: "#FFFFFF",
+      }}>Enter Prompt</FormLabel>
       <Textarea
         className="textarea"
         value={prompt}

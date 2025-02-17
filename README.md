@@ -13,13 +13,14 @@ This **File Sorting Application** is a flexible, user friendly tool designed to 
 ---
 
 ## Installation
-1. **Prerequisites**: Ensure you have Ollama, a local LLM, Python, Javascript, pip, and npm installed on your system.
-2. **Download the application**: Clone the repository.
-3. **Install Dependancies**: run `npm install` on the electron folder in the frontend and `pip install -r requirements.txt` on the backend forlder to install the necessary dependancies.
-4. **Setting up the backend**: create a file called .env within the backend folder  **Inside the .env should be**: `OLLAMA_URL=http://localhost:11434/api/generate`\
-`MODEL=deepseek-r1:8b`
+1. **Prerequisites**: Ensure you have Ollama, Python (3.10.10), pip, and npm installed on your system.
+3. **Download the application**: Clone the repository.
+4. **Install an LLM**: run `ollama run deepseek-r1:8b` for a default installation, other models & distillations can be found through [here](https://ollama.com/library/)
+5. **Install Dependancies**: run `npm install` on the electron folder in the frontend and `pip install -r requirements.txt` on the backend forlder to install the necessary dependancies.
+6. **Setting up the backend**: create a file called .env within the backend folder, the .env should be contain: `OLLAMA_URL=http://localhost:11434/api/generate`\
+`MODEL=deepseek-r1:8b` 
 
-You can change the model to whichever model you installed using Ollama
+You can change the model & url to whichever model you installed using Ollama
 
 ---
 
@@ -40,6 +41,6 @@ This project is distributed under the **MIT License**. See `LICENSE` for more in
 **Members:**
 Aidan, Rowan, Jeevan.s, Ryan, Phillip\
 hacked-2025-team-raid\
-This project was create for the 2025 HackED hackathon at the UofA\
+This project was create for the 2025 HackED hackathon at the UofA
 
 

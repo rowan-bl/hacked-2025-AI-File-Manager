@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Button, Container, Typography, TextField, Box, CircularProgress } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import GreetingPrompt from '../components/GreetingPrompt';
-import AIBubble from '../components/aibubble';
-import UserBubble from '../components/userbubble';
+import AIBubble from '../components/AIBubble';
+import UserBubble from '../components/UserBubble';
 
 const Home = () => {
   const [selectedDirectory, setSelectedDirectory] = useState(null);

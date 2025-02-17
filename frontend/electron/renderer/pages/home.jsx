@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Button, Container, Typography, TextField, Box, CircularProgress } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import GreetingPrompt from '../components/GreetingPrompt';
+import AIBubble from '../components/aibubble';
+import UserBubble from '../components/userbubble';
 
 const Home = () => {
   const [selectedDirectory, setSelectedDirectory] = useState(null);
@@ -87,12 +89,10 @@ const Home = () => {
         {/* Static History */}
         {history.map((entry, index) => (
           <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0',display: 'block' }}>
-             <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#fff', flex: 1, textAlign: 'right', marginRight:'0' }}>
-              {entry.prompt}
-            </Typography>
-            <Typography variant="body2" sx={{ flex: 1, textAlign: 'left', color: '#dddddd', display: 'block', marginLeft:'0'}}>
-              {entry.response}
-            </Typography>
+            <UserBubble content={entry.prompt} />
+            <AIBubble content={entry.response}/>
+            
+         
           </Box>
         ))}
       </Box>

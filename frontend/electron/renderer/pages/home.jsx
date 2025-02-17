@@ -1,6 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Button, Container, Typography, TextField, Box, CircularProgress } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Button,
+  Container,
+  Typography,
+  TextField,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
+import GreetingPrompt from "../components/GreetingPrompt";
+import AIBubble from "../components/AIBubble";
+import UserBubble from "../components/UserBubble";
 
 const Home = () => {
   const [ws, setWs] = useState(null);
@@ -26,10 +36,19 @@ const Home = () => {
           throw new Error("Invalid response format");
         }
 
-        setHistory((prevHistory) => [
-          ...prevHistory,
-          { prompt, response: data.description, changed_dir: data.answer },
-        ]);
+        setHistory((prevHistory) => {
+          const lastEntry = prevHistory[prevHistory.length - 1];
+          return [
+            ...prevHistory.slice(0, -1),
+            {
+              ...lastEntry,
+              response: data.description,
+              changed_dir: data.answer,
+              loading: false
+            }
+          ];
+        });
+
         setError(null);
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -68,11 +87,22 @@ const Home = () => {
       return;
     }
 
+    setHistory((prevHistory) => [
+      ...prevHistory,
+      { prompt, response: null, changed_dir: null, loading: true },
+    ]);
+
+
     setLoading(true);
     setError(null);
 
-    const message = JSON.stringify({ prompt: prompt, root_dir: selectedDirectory });
+    const message = JSON.stringify({
+      prompt: prompt,
+      root_dir: selectedDirectory,
+    });
     ws.send(message);
+
+    setPrompt("");
 
     // Fallback timeout if no response arrives
     setTimeout(() => {
@@ -80,7 +110,7 @@ const Home = () => {
         setLoading(false);
         setError("Server did not respond in time.");
       }
-    }, 5000); // Timeout after 5 seconds
+    }, 20000); 
   };
 
   return (
@@ -92,8 +122,7 @@ const Home = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-      }}
-    >
+      }}>
       {/* Folder Selection */}
       {selectedDirectory && (
         <Box
@@ -105,8 +134,8 @@ const Home = () => {
             alignItems: "center",
             gap: 1,
           }}
-        >
-          <FolderIcon color="primary" onClick={handleChooseDirectory} />
+          onClick={handleChooseDirectory} >
+          <FolderIcon color="primary"/>
           <Typography
             variant="h6"
             sx={{
@@ -114,15 +143,17 @@ const Home = () => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-            }}
-          >
+            }}>
             {selectedDirectory}
           </Typography>
         </Box>
       )}
 
       {!selectedDirectory && (
-        <Button variant="contained" color="primary" onClick={handleChooseDirectory}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleChooseDirectory}>
           Choose Directory
         </Button>
       )}
@@ -132,18 +163,19 @@ const Home = () => {
         <Box sx={{ width: "100%", marginTop: "1rem" }}>
           {history.map((entry, index) => (
             <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: "bold", color: "#fff", textAlign: "right" }}
-              >
-                {entry.prompt}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: "#dddddd", textAlign: "left", display: "block" }}
-              >
-                {loading && index === history.length - 1 ? <CircularProgress size={20} /> : entry.response}
-              </Typography>
+              <UserBubble content={entry.prompt} />
+              {entry.loading ? (
+                <Box sx={{ 
+                  display: "flex", 
+                  justifyContent: "center",
+                  alignItems: "center", 
+                  p: 2 
+                }}>
+                  <CircularProgress size={24} />
+                </Box>
+              ) : (
+                entry.response && <AIBubble content={entry.response} />
+              )}
             </Box>
           ))}
         </Box>
@@ -155,8 +187,6 @@ const Home = () => {
           {error}
         </Typography>
       )}
-
-      {/* Prompt Input */}
       {selectedDirectory && (
         <Box
           sx={{
@@ -167,19 +197,12 @@ const Home = () => {
             width: "60%",
             display: "flex",
             gap: 1,
-          }}
-        >
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Enter your prompt..."
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            sx={{ backgroundColor: "white", borderRadius: "4px" }}
+          }}>
+          <GreetingPrompt
+            prompt={prompt}
+            setPrompt={setPrompt}
+            handleSubmit={handleSubmitPrompt}
           />
-          <Button variant="contained" color="primary" onClick={handleSubmitPrompt} disabled={loading}>
-            Submit
-          </Button>
         </Box>
       )}
     </Container>

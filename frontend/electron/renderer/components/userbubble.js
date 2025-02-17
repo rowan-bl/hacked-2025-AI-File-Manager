@@ -8,17 +8,19 @@ export default function UserBubble({ content }) {
         overflowY: 'auto',
         alignContent: 'center', 
         display: 'flex',
-        justifyContent: 'flex-end'
-
+        justifyContent: 'flex-end',
+        mb: 2
       }}>
       <Box
         sx={{        
         overflowY: 'auto',
         maxHeight: '50%',
         maxWidth: '80%',
-        p: 3,
-        borderRadius: 15,
-        bgcolor: '#413F5D'   
+        py: 2,
+        px: 3,
+        borderRadius: 7,
+        bgcolor: '#413F5D',
+        textAlign: 'left'
       }}>
       <p class>
         {content}

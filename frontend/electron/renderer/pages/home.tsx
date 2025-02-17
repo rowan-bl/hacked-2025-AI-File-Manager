@@ -1,7 +1,7 @@
-import React from 'react'
-import Head from 'next/head'
-import Link from 'next/link'
-import Image from 'next/image'
+import React from "react";
+import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function HomePage() {
   return (
@@ -28,9 +28,9 @@ export default function HomePage() {
         <span>💕 </span>
       </div>
       <div className="mt-1 w-full flex-wrap flex justify-center">
-        <Link href="/response">Go to next page</Link>
+        <Link href="/next">Go to next page</Link>
         <Link href="/GreetingPage">Go to greet page</Link>
       </div>
     </React.Fragment>
-  )
+  );
 }

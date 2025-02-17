@@ -1,9 +1,16 @@
-import { useState } from 'react';
-import { Button, Container, Typography, TextField, Box, CircularProgress } from '@mui/material';
-import FolderIcon from '@mui/icons-material/Folder';
-import GreetingPrompt from '../components/GreetingPrompt';
-import AIBubble from '../components/AIBubble';
-import UserBubble from '../components/UserBubble';
+import { useState } from "react";
+import {
+  Button,
+  Container,
+  Typography,
+  TextField,
+  Box,
+  CircularProgress,
+} from "@mui/material";
+import FolderIcon from "@mui/icons-material/Folder";
+import GreetingPrompt from "../components/GreetingPrompt";
+import AIBubble from "../components/AIBubble";
+import UserBubble from "../components/UserBubble";
 
 const Home = () => {
   const [ws, setWs] = useState(null);
@@ -74,7 +81,10 @@ const Home = () => {
     setLoading(true);
     setError(null);
 
-    const message = JSON.stringify({ prompt: prompt, root_dir: selectedDirectory });
+    const message = JSON.stringify({
+      prompt: prompt,
+      root_dir: selectedDirectory,
+    });
     ws.send(message);
 
     // Fallback timeout if no response arrives
@@ -95,8 +105,7 @@ const Home = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-      }}
-    >
+      }}>
       {/* Folder Selection */}
       {selectedDirectory && (
         <Box
@@ -107,8 +116,7 @@ const Home = () => {
             display: "flex",
             alignItems: "center",
             gap: 1,
-          }}
-        >
+          }}>
           <FolderIcon color="primary" onClick={handleChooseDirectory} />
           <Typography
             variant="h6"
@@ -117,15 +125,17 @@ const Home = () => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-            }}
-          >
+            }}>
             {selectedDirectory}
           </Typography>
         </Box>
       )}
 
       {!selectedDirectory && (
-        <Button variant="contained" color="primary" onClick={handleChooseDirectory}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleChooseDirectory}>
           Choose Directory
         </Button>
       )}
@@ -136,7 +146,7 @@ const Home = () => {
           {history.map((entry, index) => (
             <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
               <UserBubble content={entry.prompt} />
-              <AIBubble content={entry.response}/>
+              <AIBubble content={entry.response} />
             </Box>
           ))}
         </Box>
@@ -158,9 +168,21 @@ const Home = () => {
             width: "60%",
             display: "flex",
             gap: 1,
-          }}
-        >
-          <GreetingPrompt prompt={prompt} setPrompt={setPrompt} handleSubmit={handleSubmitPrompt} />
+          }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Enter your prompt..."
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            sx={{ backgroundColor: "white", borderRadius: "4px" }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmitPrompt}>
+            Submit
+          </Button>
         </Box>
       )}
     </Container>

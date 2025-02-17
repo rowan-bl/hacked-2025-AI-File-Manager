@@ -3,11 +3,14 @@ import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import Textarea from "@mui/joy/Textarea";
+import { useState } from "react";
 
-export default function GreetingPrompt({ prompt, setPrompt, handleSubmit }) {
-  const onSubmit = (e) => {
+export default function GreetingPrompt() {
+  const [formInput, setFormInput] = useState("");
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(prompt);
+    console.log("submitted:", formInput);
   };
 
   return (
@@ -22,8 +25,8 @@ export default function GreetingPrompt({ prompt, setPrompt, handleSubmit }) {
       <FormLabel>Enter Prompt</FormLabel>
       <Textarea
         className="textarea"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        value={formInput}
+        onChange={(e) => setFormInput(e.target.value)}
         placeholder="Type something here…"
         minRows={3}
         endDecorator={

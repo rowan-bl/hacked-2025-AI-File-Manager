@@ -38,8 +38,8 @@ This project is distributed under the **MIT License**. See `LICENSE` for more in
 
 ## Contributors
 **Members:**
-Aidan, Rowan, Jeevan.s, Ryan, Phillip
-hacked-2025-team-raid
-This project was create for the 2025 HackED hackathon at the UofA
+Aidan, Rowan, Jeevan.s, Ryan, Phillip\
+hacked-2025-team-raid\
+This project was create for the 2025 HackED hackathon at the UofA\
 
 

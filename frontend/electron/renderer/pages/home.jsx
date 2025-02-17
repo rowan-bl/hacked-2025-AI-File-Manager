@@ -11,7 +11,6 @@ import FolderIcon from "@mui/icons-material/Folder";
 import GreetingPrompt from "../components/GreetingPrompt";
 import AIBubble from "../components/AIBubble";
 import UserBubble from "../components/UserBubble";
-import ConfirmationPrompt from "../components/ConfirmationPrompt"
 
 const Home = () => {
   const [ws, setWs] = useState(null);
@@ -73,21 +72,12 @@ const Home = () => {
     }
   };
 
-  const handleConfirmationSelection = () => {
-    
-  }
-
   const handleSubmitPrompt = () => {
     if (!prompt.trim() || !ws || ws.readyState !== WebSocket.OPEN) {
       setError("WebSocket is not connected.");
       return;
     }
 
-    setHistory(prevHistory => [
-      ...prevHistory,
-      { prompt, response: null, changed_dir: null }
-    ]);
-  
     setLoading(true);
     setError(null);
 
@@ -159,7 +149,6 @@ const Home = () => {
             <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
               <UserBubble content={entry.prompt} />
               <AIBubble content={entry.response} />
-              <ConfirmationPrompt socket={ws}/>
             </Box>
           ))}
         </Box>

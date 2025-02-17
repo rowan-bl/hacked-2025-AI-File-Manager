@@ -16,6 +16,10 @@ This **File Sorting Application** is a flexible, user friendly tool designed to 
 1. **Prerequisites**: Ensure you have Ollama, a local LLM, Python, Javascript, pip, and npm installed on your system.
 2. **Download the application**: Clone the repository.
 3. **Install Dependancies**: run `npm install` on the electron folder in the frontend and `pip install -r requirements.txt` on the backend forlder to install the necessary dependancies.
+4. **Setting up the backend**: create a file called .env within the backend folder
+**Inside should be**: `OLLAMA_URL=http://localhost:11434/api/generate MODEL=deepseek-r1:8b`
+
+You can change the model to whichever model you installed using Ollama
 
 ---
 
@@ -23,23 +27,19 @@ This **File Sorting Application** is a flexible, user friendly tool designed to 
 
 ---
 
+## Examples
 
+---
 
+## License
+This project is distributed under the **MIT License**. See `LICENSE` for more information.
 
+---
 
-
-
-
-
-J# hacked-2025-team-raid
-
+## Contributors
 **Members:**
 Aidan, Rowan, Jeevan.s, Ryan, Phillip
+hacked-2025-team-raid
+This project was create for the 2025 HackED hackathon at the UofA
 
-In order to get the backend to work you need to create a file called .env within the backend folder
-Inside should be:
 
-OLLAMA_URL=http://localhost:11434/api/generate
-MODEL=deepseek-r1:8b
-
-You can change the model to whichever model you installed using Ollama

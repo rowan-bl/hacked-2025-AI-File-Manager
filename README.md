@@ -17,8 +17,9 @@ This **File Sorting Application** is a flexible, user friendly tool designed to 
 3. **Download the application**: Clone the repository.
 4. **Install an LLM**: run `ollama run deepseek-r1:8b` for a default installation, other models & distillations can be found through [here](https://ollama.com/library/)
 5. **Install Dependancies**: run `npm install` on the electron folder in the frontend and `pip install -r requirements.txt` on the backend forlder to install the necessary dependancies.
-6. **Setting up the backend**: create a file called .env within the backend folder, the .env should be contain: `OLLAMA_URL=http://localhost:11434/api/generate`\
-`MODEL=deepseek-r1:8b` 
+6. **Setting up the backend**: create a file called .env within the backend folder, the .env should be contain: 
+```OLLAMA_URL=http://localhost:11434/api/generate
+MODEL=deepseek-r1:8b```
 
 You can change the model & url to whichever model you installed using Ollama
 

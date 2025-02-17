@@ -2,7 +2,10 @@ J# hacked-2025-team-raid
 
 
 ## Project: File_sorter_404 
-Members:
+
+---
+
+**Members:**
 Aidan, Rowan, Jeevan.s, Ryan, Phillip
 
 In order to get the backend to work you need to create a file called .env within the backend folder

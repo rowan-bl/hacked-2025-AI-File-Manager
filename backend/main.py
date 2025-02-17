@@ -16,6 +16,7 @@ OLLAMA_URL = os.getenv("OLLAMA_URL")
 MODEL = os.getenv("MODEL")
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #setup websocket
 async def handle_websocket(websocket):
     print(f"Connected: {websocket.remote_address}")
@@ -164,10 +165,17 @@ async def handle_websocket(websocket):
 =======
 root_folder =r"C:\Users\Phillip\Downloads"
 # test prompt
+=======
+root_folder =r"C:\Users\Phillip\Downloads"
+# test prompt
+>>>>>>> Stashed changes
 file_system_index_raw = fileIndex.index_from_directory(root_folder)
 file_system_index = json.dumps(file_system_index_raw, indent=2)
 count = fileIndex.count_files(file_system_index_raw)
 prompt = "can you oraganize these into different files depending on their extension?"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 # headers = {
@@ -292,6 +300,7 @@ data = {
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # # Send description to the front end # description_output
 
 
@@ -307,6 +316,10 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+=======
+
+fileIndex.move_files(organnized_data,root_folder,root_folder)
+>>>>>>> Stashed changes
 =======
 
 fileIndex.move_files(organnized_data,root_folder,root_folder)

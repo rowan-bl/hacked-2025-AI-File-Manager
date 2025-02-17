@@ -46,7 +46,11 @@ def count_files(data):
 # print(json.dumps({"root":index_from_directory(r"C:\Users\rbzom\OneDrive\Desktop\TEST DATA")}, indent=2))
 #Will move or delete a file depending on the type given, will have to modify to make more sense with the information coming in from deepseek
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 def move_files(data, current_path, root):
+=======
+def move_files(data, current_path ,root = "C:\\test_folder"):
+>>>>>>> Stashed changes
 =======
 def move_files(data, current_path ,root = "C:\\test_folder"):
 >>>>>>> Stashed changes
@@ -56,6 +60,7 @@ def move_files(data, current_path ,root = "C:\\test_folder"):
         pathlib.Path(current_path).mkdir(parents=True, exist_ok=True) #if the filepath doesnt exist, create it, otherwise does nothing
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         if isinstance(files, dict):
             move_files(files, current_path, root)
         elif isinstance(files, list):
@@ -64,11 +69,16 @@ def move_files(data, current_path ,root = "C:\\test_folder"):
                 source_file = os.path.join(root, name_ext)
                 destination = os.path.join(current_path, name_ext)
 =======
+=======
+>>>>>>> Stashed changes
         if "files" in files and isinstance(files["files"], list):
             for file_info in files["files"]:
                 file_name = f"{file_info['name']}.{file_info['extension']}"
                 source_file = os.path.join(root, file_name)
                 destination = os.path.join(current_path, file_name)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
                 if os.path.exists(source_file):
@@ -76,6 +86,7 @@ def move_files(data, current_path ,root = "C:\\test_folder"):
                     print(f"moved: {source_file} -> {destination}")
                 else:
                     print("crap it didnt move")
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 
                 
@@ -90,5 +101,7 @@ def move_files(data, current_path ,root = "C:\\test_folder"):
 
 # test_data = {'Documents': {'Text Files': ['test txt.txt', 'random_test_text_document.txt'], 'Word Documents': ['test word doc.docx']}}
 # move_files(test_data)
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

@@ -135,18 +135,8 @@ const Home = () => {
         <Box sx={{ width: "100%", marginTop: "1rem" }}>
           {history.map((entry, index) => (
             <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: "bold", color: "#fff", textAlign: "right" }}
-              >
-                {entry.prompt}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ color: "#dddddd", textAlign: "left", display: "block" }}
-              >
-                {loading && index === history.length - 1 ? <CircularProgress size={20} /> : entry.response}
-              </Typography>
+              <UserBubble content={entry.prompt} />
+              <AIBubble content={entry.response}/>
             </Box>
           ))}
         </Box>

@@ -6,11 +6,55 @@ import AIBubble from '../components/AIBubble';
 import UserBubble from '../components/UserBubble';
 
 const Home = () => {
+  const [ws, setWs] = useState(null);
   const [selectedDirectory, setSelectedDirectory] = useState(null);
-  const [prompt, setPrompt] = useState('');
-  const [aiResponse, setAiResponse] = useState(null);
+  const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
-  const [history, setHistory] = useState([]); // Static messages
+  const [history, setHistory] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8001"); // Replace with your WebSocket server URL
+
+    socket.onopen = () => {
+      console.log("WebSocket Connected");
+      setWs(socket);
+    };
+
+    socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+
+        if (!data.answer || !data.description) {
+          throw new Error("Invalid response format");
+        }
+
+        setHistory((prevHistory) => [
+          ...prevHistory,
+          { prompt, response: data.description, changed_dir: data.answer },
+        ]);
+        setError(null);
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+        setError("Invalid response from server.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+      setError("WebSocket encountered an error.");
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket Disconnected");
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   const handleChooseDirectory = async () => {
     if (window.electron && window.electron.openDirectory) {
@@ -22,54 +66,59 @@ const Home = () => {
   };
 
   const handleSubmitPrompt = () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim() || !ws || ws.readyState !== WebSocket.OPEN) {
+      setError("WebSocket is not connected.");
+      return;
+    }
+
     setLoading(true);
-    setAiResponse(null);
-    
-    // Simulate AI response
+    setError(null);
+
+    const message = JSON.stringify({ prompt: prompt, root_dir: selectedDirectory });
+    ws.send(message);
+
+    // Fallback timeout if no response arrives
     setTimeout(() => {
-      const fakeResponses = [
-        "This is a sample AI-generated response.",
-        "AI has analyzed your input and here's the result.",
-        "Your request has been processed, and this is the output.",
-      ];
-  
-      const response = fakeResponses[Math.floor(Math.random() * fakeResponses.length)];
-      
-      // Only update history AFTER response is generated
-      setHistory((prevHistory) => [...prevHistory, { prompt, response }]);
-  
-      setAiResponse(response);
-      setLoading(false);
-    }, 1500);
+      if (loading) {
+        setLoading(false);
+        setError("Server did not respond in time.");
+      }
+    }, 5000); // Timeout after 5 seconds
   };
-  
 
   return (
     <Container
       sx={{
-        textAlign: 'center',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        textAlign: "center",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
       {/* Folder Selection */}
       {selectedDirectory && (
         <Box
           sx={{
-            position: 'absolute',
+            position: "absolute",
             top: 20,
             left: 20,
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
             gap: 1,
           }}
         >
           <FolderIcon color="primary" onClick={handleChooseDirectory} />
-          <Typography variant="h6" sx={{ maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <Typography
+            variant="h6"
+            sx={{
+              maxWidth: 300,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
             {selectedDirectory}
           </Typography>
         </Box>
@@ -81,31 +130,43 @@ const Home = () => {
         </Button>
       )}
 
-      {/* AI Response Section */}
+      {/* Chat History */}
       {selectedDirectory && (
-        <Box
-          sx={{width:'100%', marginTop: '1rem'}}
-      >
-        {/* Static History */}
-        {history.map((entry, index) => (
-          <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0',display: 'block' }}>
-            <UserBubble content={entry.prompt} />
-            <AIBubble content={entry.response}/>
-            
-         
-          </Box>
-        ))}
-      </Box>
+        <Box sx={{ width: "100%", marginTop: "1rem" }}>
+          {history.map((entry, index) => (
+            <Box key={index} sx={{ display: "block", padding: "5px 0" }}>
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: "bold", color: "#fff", textAlign: "right" }}
+              >
+                {entry.prompt}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: "#dddddd", textAlign: "left", display: "block" }}
+              >
+                {loading && index === history.length - 1 ? <CircularProgress size={20} /> : entry.response}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <Typography variant="body2" sx={{ color: "red", marginTop: "10px" }}>
+          {error}
+        </Typography>
       )}
       {selectedDirectory && (
         <Box
           sx={{
-            position: 'absolute',
+            position: "absolute",
             bottom: 20,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '60%',
-            display: 'flex',
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "60%",
+            display: "flex",
             gap: 1,
           }}
         >

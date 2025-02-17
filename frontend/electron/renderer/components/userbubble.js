@@ -1,7 +1,16 @@
 import { Box } from '@mui/material';
+import { Container } from '@mui/material';
 
 export default function UserBubble({ content }) {
   return (
+    <Container
+        sx={{
+        overflowY: 'auto',
+        alignContent: 'center', 
+        display: 'flex',
+        justifyContent: 'flex-end'
+
+      }}>
       <Box
         sx={{        
         overflowY: 'auto',
@@ -15,5 +24,6 @@ export default function UserBubble({ content }) {
         {content}
       </p>
       </Box>
+    </Container>  
   )
 }

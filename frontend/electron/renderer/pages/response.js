@@ -1,35 +1,27 @@
-import UserBubble from '../components/userbubble';
 import { Container } from '@mui/material';
 import { List } from '@mui/material';
 import { ListItem } from '@mui/material';
 
-export default function NextPage() {
+import UserBubble from '../components/userbubble';
+import AIBubble from '../components/aibubble';
 
-  
+export default function NextPage() {
 
   return (
     <main>
-   
-      const chatInterface = () => {
-        const[messages, setMessages] = useState([])
-        const[input, setInput] = useState("")         
-      }
+      <div className='flex content-center'>
+       <Container
+            sx={{
+            overflowY: 'auto',
+            maxHeight: '80%',
+            width: '80%'
+          }}>
 
-      
-
-     <Container
-          sx={{
-          overflowY: 'auto',
-          maxHeight: '80%',
-          position: 'fixed',
-          right: 1,
-          display: 'flex',
-          justifyContent: 'flex-end'
-        }}>
-
-          <UserBubble content="Hello World"/>
-
-      </Container> 
+            <UserBubble content="Hello World" />
+          
+            <AIBubble content="Nuh Uh" /> 
+        </Container>
+      </div>
     </main>
    );
 }

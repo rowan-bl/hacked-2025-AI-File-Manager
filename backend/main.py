@@ -114,11 +114,34 @@ async def handle_websocket(websocket):
                 response = requests.post(OLLAMA_URL, headers=headers, data=json.dumps(data))
                 response.raise_for_status()
                 
-                await websocket.send(json.dumps(confirmation_response))
                 print("Sent confirmation response:", confirmation_response)
             else:
                 error_resp = {"error": "Unknown message type."}
                 await websocket.send(json.dumps(error_resp))
+            answer_start = raw_output.find("<answer>")
+            answer_end = raw_output.find("</answer>")
+            description_start = raw_output.find("<description>")
+            description_end = raw_output.find("</description>")
+
+            json_output = raw_output[answer_start + len("<answer>") : answer_end].strip()
+            description_output = raw_output[description_start + len("<description>") : description_end].strip()
+
+            try:
+                organized_data = json.loads(json_output)
+                print(json_output, type(json_output)) #string type
+                print(organized_data, type(organized_data)) #dict type
+            except json.JSONDecodeError as e:
+                print("error decoding json", e)
+
+            output_data = {
+                "answer": organized_data,
+                "description": description_output
+            }
+
+            await websocket.send(json.dumps(output_data))
+            print("Sent response to frontend:", output_data)
+
+            fileIndex.move_files(organized_data, root_dir, root_dir)
         
     except websockets.ConnectionClosed:
         # The client disconnected
